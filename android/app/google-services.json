@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1093227510089",
+    "project_id": "markhor-movers",
+    "storage_bucket": "markhor-movers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093227510089:android:9bfbbf6494ec945b4d4298",
+        "android_client_info": {
+          "package_name": "com.example.markhor_movers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWkal7qMB3YCCz-9AMPK4r4fEQ9l93B04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093227510089:android:1bb4a6c575f64c374d4298",
+        "android_client_info": {
+          "package_name": "com.example.markhor_movers_user"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWkal7qMB3YCCz-9AMPK4r4fEQ9l93B04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
