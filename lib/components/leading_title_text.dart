@@ -7,6 +7,7 @@ class LeadingTitleText extends StatelessWidget {
       this.color = Colors.white,
       this.fontSize = 24,
       this.padding,
+      this.textAlign,
       this.fontWeight = FontWeight.w600})
       : super(key: key);
 
@@ -14,6 +15,7 @@ class LeadingTitleText extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
   final Color? color;
+  final TextAlign? textAlign;
   final EdgeInsets? padding;
 
   @override
@@ -24,6 +26,7 @@ class LeadingTitleText extends StatelessWidget {
       //     EdgeInsets.symmetric(horizontal: paddingDouble*24, vertical: paddingDouble *7 ),
       child: Text(
         title,
+        textAlign: textAlign,
         style: GoogleFonts.poppins(
           fontSize: fontSize,
           fontWeight: fontWeight,

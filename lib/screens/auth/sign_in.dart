@@ -29,15 +29,15 @@ class _SignInScreenState extends State<SignInScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           LeadingTitleText(
-            "Sign up",
-            fontSize: 72,
+            "Enter your mobile number",
+            fontSize: 30,
             padding: EdgeInsets.only(
                 left: 20, right: 20, top: size.height * 0.1, bottom: 30),
           ),
           AuthTextField(
               hintText: '3490319909',
               controller: _phoneNoController,
-              prefixIconURL: personIcon),
+              prefixIconURL: kPersonIcon),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
@@ -51,9 +51,9 @@ class _SignInScreenState extends State<SignInScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconBtn(googleIcon, onPressed: () {}),
+              IconBtn(kGoogleIcon, onPressed: () {}),
               IconBtn(
-                facebookIcon,
+                kFacebookIcon,
                 iconColor: Colors.blue,
                 onPressed: () {},
               ),

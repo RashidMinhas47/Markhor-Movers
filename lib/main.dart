@@ -4,6 +4,7 @@ import 'package:markhor_movers/firebase_options.dart';
 import 'package:markhor_movers/screens/auth/add_payment.dart';
 import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
+import 'package:markhor_movers/screens/home/home.dart';
 
 import 'screens/auth/sign_in.dart';
 
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         OTPScreen.scr: (context) => const OTPScreen(),
         CreateProfile.scr: (context) => const CreateProfile(),
         AddPaymentScreen.scr: (context) => const AddPaymentScreen(),
+        HomeScreen.scr: (context) => const HomeScreen(),
       },
     );
   }

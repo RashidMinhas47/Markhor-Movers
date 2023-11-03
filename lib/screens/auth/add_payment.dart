@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:markhor_movers/components/auth_button.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
+import 'package:markhor_movers/constants/image_urls.dart';
+import 'package:markhor_movers/screens/home/home.dart';
 
 class AddPaymentScreen extends StatefulWidget {
   static const String scr = '/AddPaymentScreen';
@@ -12,6 +16,7 @@ class AddPaymentScreen extends StatefulWidget {
 class _AddPaymentScreenState extends State<AddPaymentScreen> {
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(),
       body: Center(
@@ -36,17 +41,46 @@ class _AddPaymentScreenState extends State<AddPaymentScreen> {
             "Select your preferred payment method",
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
           ),
-          Row(
-            children: [
-              Container(
-                color: Colors.red,
-                height: 34,
-                width: 34,
-              ),
-              LeadingTitleText("Credit or Debit Card"),
-            ],
+          ListTile(
+            onTap: () {},
+            leading: SvgPicture.asset(kCardIcon),
+            title: LeadingTitleText(
+              "Credit or Debit Card",
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          ListTile(
+            onTap: () {},
+            leading: SvgPicture.asset(kCardIcon),
+            title: LeadingTitleText(
+              "JazzCash",
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          ListTile(
+            onTap: () {},
+            leading: SvgPicture.asset(kCardIcon),
+            title: LeadingTitleText(
+              "EasyPaisa",
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          Spacer(),
+          AuthButton(
+            onPressed: () {
+              Navigator.pushNamed(context, HomeScreen.scr);
+            },
+            title: 'Next',
+            size: Size(size.width * 0.9, 60),
+          ),
+          SizedBox(
+            height: 20,
           )
         ],
       )),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markhor_movers/components/info_text_field.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
+import 'package:markhor_movers/screens/auth/add_payment.dart';
 
 import '../../components/auth_button.dart';
 
@@ -98,9 +99,11 @@ class _CreateProfileState extends State<CreateProfile> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
             child: AuthButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, AddPaymentScreen.scr);
+              },
               title: 'Next',
               size: Size(size.width * 0.9, 59),
             ),

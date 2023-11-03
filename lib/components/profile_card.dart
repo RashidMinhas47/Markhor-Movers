@@ -24,7 +24,7 @@ class ProfileCard extends StatelessWidget {
             radius: 30,
             child: Center(
                 child: SvgPicture.asset(
-              personIcon,
+              kPersonIcon,
               fit: BoxFit.contain,
               width: 70,
             )),
