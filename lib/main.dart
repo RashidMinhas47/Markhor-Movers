@@ -1,14 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:markhor_movers/components/auth_button.dart';
-import 'package:markhor_movers/components/auth_text_field.dart';
-import 'package:markhor_movers/components/icon_btn.dart';
-import 'package:markhor_movers/components/leading_title_text.dart';
-import 'package:markhor_movers/constants/colors_scheme.dart';
-import 'package:markhor_movers/constants/image_urls.dart';
 import 'package:markhor_movers/firebase_options.dart';
+import 'package:markhor_movers/screens/auth/add_payment.dart';
+import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
 
 import 'screens/auth/sign_in.dart';
@@ -32,6 +26,8 @@ class MyApp extends StatelessWidget {
       routes: {
         SignInScreen.scr: (context) => const SignInScreen(),
         OTPScreen.scr: (context) => const OTPScreen(),
+        CreateProfile.scr: (context) => const CreateProfile(),
+        AddPaymentScreen.scr: (context) => const AddPaymentScreen(),
       },
     );
   }

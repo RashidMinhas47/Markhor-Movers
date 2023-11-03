@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markhor_movers/components/auth_button.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
+import 'package:markhor_movers/screens/auth/create_profile.dart';
 
 class OTPScreen extends StatefulWidget {
   const OTPScreen({super.key});
@@ -58,7 +59,9 @@ class _OTPScreenState extends State<OTPScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: AuthButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, CreateProfile.scr);
+              },
               title: 'Next',
               size: Size(size.width * ratio * 0.8, size.height * ratio * 0.034),
             ),

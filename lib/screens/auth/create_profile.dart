@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:markhor_movers/components/auth_text_field.dart';
 import 'package:markhor_movers/components/info_text_field.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 
@@ -28,7 +27,7 @@ class _CreateProfileState extends State<CreateProfile> {
           LeadingTitleText(
             "What's your name?",
             fontSize: 18,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           ),
           Padding(
             padding:
@@ -47,7 +46,7 @@ class _CreateProfileState extends State<CreateProfile> {
             "By tapping the arrow below, you agree to MARKHOR MOVERS Terms of Use and acknowledge that you have read the Privacy Policy",
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           ),
           const Spacer(),
           Padding(
