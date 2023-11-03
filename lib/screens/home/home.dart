@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: kPrimaryColor,
       ),
+      //..
       body: Center(
         child: Column(
           children: [
