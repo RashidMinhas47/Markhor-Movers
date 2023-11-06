@@ -57,14 +57,14 @@ class _OTPScreenState extends State<OTPScreen> {
           ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
             child: AuthButton(
-              onPressed: () {
-                Navigator.pushNamed(context, CreateProfile.scr);
-              },
-              title: 'Next',
-              size: Size(size.width * ratio * 0.8, size.height * ratio * 0.034),
-            ),
+                size: Size(size.width * 0.9, 59),
+                onPressed: () {
+                  Navigator.pushNamed(context, CreateProfile.scr);
+                },
+                title: 'Next'),
           ),
           SizedBox(
             height: 30,

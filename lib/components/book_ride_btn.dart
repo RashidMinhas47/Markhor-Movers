@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 
 class RideBookBtn extends StatelessWidget {
-  const RideBookBtn({
-    super.key,
-  });
+  const RideBookBtn({super.key, required this.btnIcon, required this.btnTitle});
+  final String btnTitle;
+  final String btnIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,12 @@ class RideBookBtn extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(12)),
                 child: LeadingTitleText(
-                  'R',
+                  btnIcon,
                   color: Colors.black,
                 ),
               ),
               LeadingTitleText(
-                'Ride',
+                btnTitle,
                 fontSize: 18,
                 fontWeight: FontWeight.w400,
               )

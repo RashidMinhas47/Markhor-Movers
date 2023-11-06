@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markhor_movers/firebase_options.dart';
 import 'package:markhor_movers/screens/auth/add_payment.dart';
 import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
 import 'package:markhor_movers/screens/home/home.dart';
+import 'package:markhor_movers/screens/riverpod_home.dart';
 
 import 'screens/auth/sign_in.dart';
 
@@ -13,7 +15,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         CreateProfile.scr: (context) => const CreateProfile(),
         AddPaymentScreen.scr: (context) => const AddPaymentScreen(),
         HomeScreen.scr: (context) => const HomeScreen(),
+        RiverpodHome.scr: (context) => const RiverpodHome()
       },
     );
   }

@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           children: [
             Container(
-              height: size.height * 0.4,
+              height: size.height * 0.34,
               width: size.width,
               color: kPrimaryColor,
               child: Column(
@@ -51,13 +51,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: ElevatedButton(
-                          onPressed: () {}, child: Text("Turn on location")),
+                          onPressed: () {},
+                          child: const Text("Turn on location")),
                     )
                   ]),
             ),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [RideBookBtn(), SizedBox(width: 20), RideBookBtn()],
+              children: [
+                RideBookBtn(
+                  btnIcon: 'R',
+                  btnTitle: 'Rider',
+                ),
+                SizedBox(width: 20),
+                RideBookBtn(
+                  btnIcon: 'P',
+                  btnTitle: 'Package',
+                )
+              ],
             ),
             Container(
               alignment: Alignment.centerLeft,
