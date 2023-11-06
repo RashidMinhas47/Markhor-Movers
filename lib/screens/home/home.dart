@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:markhor_movers/components/book_ride_btn.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
+import 'package:markhor_movers/screens/home/views/book_ride.dart';
+import 'package:markhor_movers/screens/home/views/send_packae.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String scr = '/HomeScreen';
@@ -56,17 +59,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     )
                   ]),
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RideBookBtn(
-                  btnIcon: 'R',
+                  btnIcon: kRideIcon,
                   btnTitle: 'Rider',
+                  onTap: () {
+                    Navigator.pushNamed(context, BookRide.scr);
+                  },
                 ),
-                SizedBox(width: 20),
+                const Gap(20),
                 RideBookBtn(
-                  btnIcon: 'P',
+                  btnIcon: kPackageIcon,
                   btnTitle: 'Package',
+                  onTap: () {
+                    Navigator.pushNamed(context, SendPackage.scr);
+                  },
                 )
               ],
             ),
@@ -84,10 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SvgPicture.asset(
-              kMapPic,
-              height: 200,
-            ),
+            const Gap(30),
+            Image.asset(kAroundYou),
           ],
         ),
       ),

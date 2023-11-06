@@ -6,6 +6,8 @@ import 'package:markhor_movers/screens/auth/add_payment.dart';
 import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
 import 'package:markhor_movers/screens/home/home.dart';
+import 'package:markhor_movers/screens/home/views/book_ride.dart';
+import 'package:markhor_movers/screens/home/views/send_packae.dart';
 import 'package:markhor_movers/screens/riverpod_home.dart';
 
 import 'screens/auth/sign_in.dart';
@@ -32,7 +34,9 @@ class MyApp extends StatelessWidget {
         CreateProfile.scr: (context) => const CreateProfile(),
         AddPaymentScreen.scr: (context) => const AddPaymentScreen(),
         HomeScreen.scr: (context) => const HomeScreen(),
-        RiverpodHome.scr: (context) => const RiverpodHome()
+        RiverpodHome.scr: (context) => const RiverpodHome(),
+        SendPackage.scr: (context) => const SendPackage(),
+        BookRide.scr: (context) => const BookRide(),
       },
     );
   }

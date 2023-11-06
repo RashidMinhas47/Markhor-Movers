@@ -27,7 +27,7 @@ class LeadingTitleText extends StatelessWidget {
       child: Text(
         title,
         textAlign: textAlign,
-        style: GoogleFonts.poppins(
+        style: GoogleFonts.inter(
           fontSize: fontSize,
           fontWeight: fontWeight,
           color: color,
