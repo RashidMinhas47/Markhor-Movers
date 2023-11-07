@@ -45,6 +45,8 @@ dependencies:
   firebase_storage: ^11.4.0
   flutter_riverpod: ^2.4.5
   gap: ^3.0.1
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
 
 dev_dependencies:
   flutter_test:

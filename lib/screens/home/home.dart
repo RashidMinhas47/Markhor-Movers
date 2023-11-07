@@ -7,6 +7,7 @@ import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String scr = '/HomeScreen';
@@ -17,6 +18,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Future<String> setName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    Future.delayed(const Duration(seconds: 3)).whenComplete(
+        () async => await prefs.setString('name', 'Rashid Minhas'));
+
+    return prefs.get('name').toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -93,6 +103,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            FutureBuilder(
+                future: setName(),
+                builder: (context, snap) {
+                  if (snap.hasData) {
+                    String name = snap.data!;
+                    return LeadingTitleText(name);
+                  } else if (snap.hasData) {
+                    return Text(snap.error.toString());
+                  } else if (snap.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return Text('You Have got something');
+                  }
+                }),
             const Gap(30),
             Image.asset(kAroundYou),
           ],
