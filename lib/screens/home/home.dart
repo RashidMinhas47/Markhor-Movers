@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:markhor_movers/components/book_ride_btn.dart';
@@ -7,7 +8,9 @@ import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
+import 'package:markhor_movers/screens/riverpod_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String scr = '/HomeScreen';
@@ -108,7 +111,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, snap) {
                   if (snap.hasData) {
                     String name = snap.data!;
-                    return LeadingTitleText(name);
+                    return TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, RiverpodHome.scr);
+                        },
+                        child: LeadingTitleText(name ?? "You Got not data"));
                   } else if (snap.hasData) {
                     return Text(snap.error.toString());
                   } else if (snap.connectionState == ConnectionState.waiting) {

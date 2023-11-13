@@ -14,9 +14,14 @@ class OTPScreen extends StatefulWidget {
 
 class _OTPScreenState extends State<OTPScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final ratio = MediaQuery.of(context).devicePixelRatio;
     return Scaffold(
       appBar: AppBar(),
       body: Center(

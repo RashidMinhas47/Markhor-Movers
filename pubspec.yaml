@@ -47,6 +47,8 @@ dependencies:
   gap: ^3.0.1
   shared_preferences: ^2.2.2
   sqflite: ^2.3.0
+  firebase_core: ^2.21.0
+  google_sign_in: ^6.1.5
 
 dev_dependencies:
   flutter_test:

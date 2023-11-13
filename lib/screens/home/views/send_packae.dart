@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
-import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:gap/gap.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
 import '../../../components/auth_button.dart';

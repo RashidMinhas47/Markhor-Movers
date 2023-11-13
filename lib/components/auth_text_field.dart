@@ -7,13 +7,17 @@ class AuthTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool? obscureText;
   final Size? size;
+  final FormFieldValidator<String>? validator;
   final String prefixIconURL;
+  final Key formKey;
   AuthTextField(
       {Key? key,
       this.size,
+      required this.validator,
       required this.hintText,
       required this.controller,
       this.obscureText = false,
+      required this.formKey,
       required this.prefixIconURL})
       : super(key: key);
 
@@ -23,7 +27,7 @@ class AuthTextField extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Spacer(),
+        const Spacer(),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
@@ -35,28 +39,32 @@ class AuthTextField extends StatelessWidget {
           flex: 4,
           child: Container(
             padding: EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: controller,
-              style: GoogleFonts.poppins(
-                color: Color.fromARGB(255, 255, 255, 255),
-                fontSize: 20,
-              ),
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10)
-              ],
-              keyboardType: TextInputType.number,
-              obscureText: obscureText ?? false,
-              decoration: InputDecoration(
-                hintText: hintText,
-                filled: true,
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(14),
-                    borderSide: BorderSide.none),
-                fillColor: Color.fromARGB(245, 78, 78, 78),
-                hintStyle: GoogleFonts.poppins(
-                  color: const Color(0xFF8E8E8E),
+            child: Form(
+              key: formKey,
+              child: TextFormField(
+                validator: validator,
+                controller: controller,
+                style: GoogleFonts.poppins(
+                  color: Color.fromARGB(255, 255, 255, 255),
                   fontSize: 20,
+                ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(10)
+                ],
+                keyboardType: TextInputType.number,
+                obscureText: obscureText ?? false,
+                decoration: InputDecoration(
+                  hintText: hintText,
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                      borderSide: BorderSide.none),
+                  fillColor: Color.fromARGB(245, 78, 78, 78),
+                  hintStyle: GoogleFonts.poppins(
+                    color: const Color(0xFF8E8E8E),
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),

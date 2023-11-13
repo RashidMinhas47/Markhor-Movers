@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markhor_movers/components/auth_button.dart';
 import 'package:markhor_movers/components/auth_text_field.dart';
-import 'package:markhor_movers/screens/auth/otp_screen.dart';
+import 'package:markhor_movers/repositories/auth_repositories.dart';
 
 import '../../components/icon_btn.dart';
 import '../../components/leading_title_text.dart';
 import '../../constants/colors_scheme.dart';
 import '../../constants/image_urls.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends ConsumerStatefulWidget {
   const SignInScreen({super.key});
   static const String scr = '/SignInScreen';
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  ConsumerState<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _phoneNoController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -35,9 +37,20 @@ class _SignInScreenState extends State<SignInScreen> {
                 left: 20, right: 20, top: size.height * 0.1, bottom: 30),
           ),
           AuthTextField(
-              hintText: '3490319909',
-              controller: _phoneNoController,
-              prefixIconURL: kPersonIcon),
+            formKey: formKey,
+            hintText: '3490319909',
+            controller: _phoneNoController,
+            prefixIconURL: kPersonIcon,
+            validator: (value) {
+              if (value!.length <= 9) {
+                return 'Your phone number is not completed';
+              } else if (value.isEmpty) {
+                return 'Please enter the phone number';
+              } else if (value.contains('3')) {
+                return null;
+              }
+            },
+          ),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Text(
@@ -63,7 +76,11 @@ class _SignInScreenState extends State<SignInScreen> {
           AuthButton(
               size: Size(size.width * 0.9, 59),
               onPressed: () {
-                Navigator.pushNamed(context, OTPScreen.scr);
+                if (formKey.currentState!.validate()) {
+                  ref.read(authRepos).signinWithPhone(
+                      phoneNum: "+92${_phoneNoController.text}",
+                      context: context);
+                }
               },
               title: 'Next'),
           const SizedBox(

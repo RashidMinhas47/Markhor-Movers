@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:markhor_movers/riverpod/riverpod_providers.dart';
 
 class RiverpodHome extends ConsumerStatefulWidget {
   const RiverpodHome({super.key});
@@ -44,6 +45,15 @@ class _RiverpodHomeState extends ConsumerState<RiverpodHome> {
               onChanged: (value) {},
             ),
             // Text("${ref.watch(jsonData[0]['name'])} hello dear!"),
+            Consumer(builder: (builder, ref, child) {
+              return ref.read(userData).when(data: (data) {
+                return Text(data);
+              }, error: (error, stk) {
+                return Text(error.toString());
+              }, loading: () {
+                return const CircularProgressIndicator();
+              });
+            })
           ],
         ),
       ),
