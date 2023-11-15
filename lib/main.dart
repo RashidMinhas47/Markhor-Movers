@@ -8,6 +8,7 @@ import 'package:markhor_movers/screens/auth/otp_screen.dart';
 import 'package:markhor_movers/screens/home/home.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
+import 'package:markhor_movers/screens/new_map.dart';
 import 'package:markhor_movers/screens/riverpod_home.dart';
 
 import 'screens/auth/sign_in.dart';
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
-      initialRoute: SignInScreen.scr,
+      initialRoute: MapSample.scr,
       routes: {
         SignInScreen.scr: (context) => const SignInScreen(),
         OTPScreen.scr: (context) => const OTPScreen(),
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         RiverpodHome.scr: (context) => const RiverpodHome(),
         SendPackage.scr: (context) => const SendPackage(),
         BookRide.scr: (context) => const BookRide(),
+        MapSample.scr: (context) => const MapSample(),
       },
     );
   }

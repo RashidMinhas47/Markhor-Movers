@@ -49,6 +49,7 @@ dependencies:
   sqflite: ^2.3.0
   firebase_core: ^2.21.0
   google_sign_in: ^6.1.5
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:
