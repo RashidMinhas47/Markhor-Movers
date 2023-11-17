@@ -8,7 +8,7 @@ class InfoTextFeild extends StatelessWidget {
   final bool? obscureText;
   final Size? size;
   final String? prefixIconURL;
-  InfoTextFeild(
+  const InfoTextFeild(
       {Key? key,
       this.size,
       required this.hintText,
@@ -22,7 +22,7 @@ class InfoTextFeild extends StatelessWidget {
     return Expanded(
       flex: 4,
       child: Container(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: TextFormField(
           controller: controller,
           style: GoogleFonts.poppins(
@@ -33,7 +33,7 @@ class InfoTextFeild extends StatelessWidget {
           //   FilteringTextInputFormatter.digitsOnly,
           //   LengthLimitingTextInputFormatter(10)
           // ],
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
           obscureText: obscureText ?? false,
           decoration: InputDecoration(
             hintText: hintText,

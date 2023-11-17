@@ -8,6 +8,7 @@ import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
+import 'package:markhor_movers/screens/home/views/profile.dart';
 import 'package:markhor_movers/screens/riverpod_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
@@ -41,7 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Icons.menu,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, ProfileSceen.scr);
+          },
         ),
         backgroundColor: kPrimaryColor,
       ),

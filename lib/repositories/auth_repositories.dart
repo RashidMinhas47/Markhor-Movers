@@ -2,23 +2,82 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:markhor_movers/screens/auth/check_user_status.dart';
+import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-final authRepos = StateProvider<AuthRepositories>((ref) => AuthRepositories());
+final authProvider =
+    StateProvider<AuthRepositories>((ref) => AuthRepositories());
 final codeRead = Provider((ref) {
-  return ref.read(authRepos).getCode;
+  return ref.read(authProvider).getCode;
 });
 
-final class AuthRepositories {
+class AuthRepositories {
+  String _currentUserImage = '';
+  String _currentUserName = '';
+  get getCurrentUserName => _currentUserName;
+  get getCurrentUserImage => _currentUserImage;
+
+  set currentUserImage(userImage) => _currentUserImage = userImage;
+  // String? currentUserEmail;
+  // String? currentUserId;
   String _phoneNumber = '';
   String _code = '';
   String get getPhoneNum => _phoneNumber;
   String get getCode => _code;
   set setCode(String newCode) => _code = newCode;
   final _auth = FirebaseAuth.instance;
-  void googleSignin() async {
+  static Future<void> googleSignOut() async {
     GoogleSignIn googleSignIn = GoogleSignIn();
     GoogleSignInAuthentication googleSignInAuthentication;
+    try {
+      await googleSignIn.signOut();
+      await googleSignIn.disconnect();
+      print('.................USER SIGNING SUCCESSFULLY');
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static gSignOut(BuildContext context) {
+    final _auth = FirebaseAuth.instance;
+    _auth.signOut();
+    final gAccount = GoogleSignIn();
+    gAccount.signOut();
+    gAccount.disconnect();
+    Navigator.pushNamed(context, UserStatus.scr);
+  }
+
+  setUserCredential(String userImg, userName) {
+    _currentUserImage = userImg;
+    _currentUserName = userName;
+  }
+
+  googleSignin(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+    if (credential != null) {
+      prefs.setString(IMAGEURLKEY, gUser.photoUrl!);
+      prefs.setString(EMAILKEY, gUser.email);
+      prefs.setString(NAMEKEY, gUser.displayName!);
+      setUserCredential(
+          prefs.getString(IMAGEURLKEY)!, prefs.getString(NAMEKEY));
+      final _cloudFirestore = FirebaseFirestore.instance;
+      _cloudFirestore.collection("USERS").add({
+        'userName': gUser.displayName,
+        'email': gUser.email,
+        'photoURL': gUser.photoUrl,
+        'userID': gUser.id
+      });
+
+      Navigator.pushNamed(context, CreateProfile.scr);
+    }
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
   void signinWithPhone(
@@ -41,3 +100,7 @@ final class AuthRepositories {
     }
   }
 }
+
+const String IMAGEURLKEY = 'IMAGEURLKEY';
+const String NAMEKEY = 'NAMEKEY';
+const String EMAILKEY = 'EMAILKEY';

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:markhor_movers/components/auth_button.dart';
 import 'package:markhor_movers/components/auth_text_field.dart';
 import 'package:markhor_movers/repositories/auth_repositories.dart';
+import 'package:markhor_movers/screens/auth/create_profile.dart';
 
 import '../../components/icon_btn.dart';
 import '../../components/leading_title_text.dart';
@@ -64,11 +66,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconBtn(kGoogleIcon, onPressed: () {}),
+              IconBtn(kGoogleIcon, onPressed: () {
+                AuthRepositories().googleSignin(context);
+              }),
               IconBtn(
                 kFacebookIcon,
                 iconColor: Colors.blue,
-                onPressed: () {},
+                onPressed: () {
+                  AuthRepositories.googleSignOut();
+                },
               ),
             ],
           ),
@@ -76,11 +82,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
           AuthButton(
               size: Size(size.width * 0.9, 59),
               onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  ref.read(authRepos).signinWithPhone(
-                      phoneNum: "+92${_phoneNoController.text}",
-                      context: context);
-                }
+                GoogleSignIn googleSignIn = GoogleSignIn();
+                String email = googleSignIn.currentUser!.email;
+                print('.........................email.....................');
               },
               title: 'Next'),
           const SizedBox(

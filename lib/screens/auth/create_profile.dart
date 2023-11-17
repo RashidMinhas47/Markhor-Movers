@@ -1,9 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:markhor_movers/components/info_text_field.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
+import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/auth/add_payment.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/auth_button.dart';
 
@@ -16,6 +19,31 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
+  String? imageURl;
+  String firstName = '';
+  TextEditingController firstNameCont = TextEditingController();
+  TextEditingController lastNameCont = TextEditingController();
+
+  void getImageURL() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    imageURl = prefs.getString(IMAGEURLKEY)!;
+    firstNameCont.text = prefs.getString(NAMEKEY)!.split(' ').elementAt(0);
+    lastNameCont.text = prefs.getString(NAMEKEY)!.split(' ').elementAt(1);
+    print('...........................$imageURl................');
+  }
+
+  assetImage() {
+    getImageURL();
+    return imageURl;
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getImageURL();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -37,12 +65,29 @@ class _CreateProfileState extends State<CreateProfile> {
               children: [
                 InfoTextFeild(
                   hintText: 'First',
+                  controller: firstNameCont,
                 ),
-                InfoTextFeild(hintText: 'Last'),
+                InfoTextFeild(
+                  hintText: 'Last',
+                  controller: lastNameCont,
+                ),
               ],
             ),
           ),
-          profileAwatar,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              imageURl == null
+                  ? CircleAvatar(
+                      radius: 70,
+                      child: Icon(Icons.person),
+                    )
+                  : CircleAvatar(
+                      radius: 70,
+                      backgroundImage: NetworkImage(imageURl!),
+                    ),
+            ],
+          ),
           LeadingTitleText(
             "By tapping the arrow below, you agree to MARKHOR MOVERS Terms of Use and acknowledge that you have read the Privacy Policy",
             fontSize: 14,
