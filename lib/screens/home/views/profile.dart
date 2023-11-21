@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -9,15 +10,15 @@ import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/auth/check_user_status.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileSceen extends ConsumerStatefulWidget {
+class ProfileSceen extends StatefulWidget {
   static const String scr = '/ProfileScreen';
   const ProfileSceen({super.key});
 
   @override
-  ConsumerState<ProfileSceen> createState() => _ProfileSceenState();
+  State<ProfileSceen> createState() => _ProfileSceenState();
 }
 
-class _ProfileSceenState extends ConsumerState<ProfileSceen> {
+class _ProfileSceenState extends State<ProfileSceen> {
   String userName = '';
   String userImage = '';
   getData() async {
@@ -28,9 +29,10 @@ class _ProfileSceenState extends ConsumerState<ProfileSceen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getData();
+    Future.delayed(const Duration(seconds: 3), () {
+      getData();
+    });
   }
 
   @override
@@ -55,12 +57,13 @@ class _ProfileSceenState extends ConsumerState<ProfileSceen> {
                     children: [
                       CircleAvatar(
                         radius: 40,
-                        child: Icon(Icons.person),
+                        backgroundImage: NetworkImage(userImage),
                       ),
-                      Gap(20),
+                      const Gap(20),
                       Text(
                         //TODO: THE NEXT WORK WILL DONE HERE
-                        ref.read(authProvider).getCurrentUserName,
+
+                        userName,
                         style: GoogleFonts.poppins(
                             fontSize: 24,
                             color: Colors.white,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:markhor_movers/components/auth_button.dart';
@@ -12,14 +11,14 @@ import '../../components/leading_title_text.dart';
 import '../../constants/colors_scheme.dart';
 import '../../constants/image_urls.dart';
 
-class SignInScreen extends ConsumerStatefulWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
   static const String scr = '/SignInScreen';
   @override
-  ConsumerState<SignInScreen> createState() => _SignInScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignInScreenState extends ConsumerState<SignInScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final _phoneNoController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   @override

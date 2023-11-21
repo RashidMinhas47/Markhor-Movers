@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:markhor_movers/screens/auth/check_user_status.dart';
 import 'package:markhor_movers/screens/auth/create_profile.dart';
@@ -8,15 +7,9 @@ import 'package:markhor_movers/screens/auth/otp_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-final authProvider =
-    StateProvider<AuthRepositories>((ref) => AuthRepositories());
-final codeRead = Provider((ref) {
-  return ref.read(authProvider).getCode;
-});
-
-class AuthRepositories {
+class AuthRepositories extends ChangeNotifier {
   String _currentUserImage = '';
-  String _currentUserName = '';
+  String _currentUserName = 'Rashid Minhas';
   get getCurrentUserName => _currentUserName;
   get getCurrentUserImage => _currentUserImage;
 

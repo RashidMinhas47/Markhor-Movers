@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:markhor_movers/components/book_ride_btn.dart';
@@ -115,9 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snap.hasData) {
                     String name = snap.data!;
                     return TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, RiverpodHome.scr);
-                        },
+                        onPressed: () {},
                         child: LeadingTitleText(name ?? "You Got not data"));
                   } else if (snap.hasData) {
                     return Text(snap.error.toString());
