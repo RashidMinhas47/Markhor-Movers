@@ -19,29 +19,17 @@ class CreateProfile extends StatefulWidget {
 }
 
 class _CreateProfileState extends State<CreateProfile> {
-  String? imageURl;
-  String firstName = '';
   TextEditingController firstNameCont = TextEditingController();
   TextEditingController lastNameCont = TextEditingController();
 
-  void getImageURL() async {
+  Future<Map<String, dynamic>> getDefaultData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    imageURl = prefs.getString(IMAGEURLKEY)!;
     firstNameCont.text = prefs.getString(NAMEKEY)!.split(' ').elementAt(0);
     lastNameCont.text = prefs.getString(NAMEKEY)!.split(' ').elementAt(1);
-    print('...........................$imageURl................');
-  }
-
-  assetImage() {
-    getImageURL();
-    return imageURl;
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getImageURL();
+    return {
+      NAMEKEY: prefs.getString(NAMEKEY),
+      IMAGEURLKEY: prefs.getString(IMAGEURLKEY),
+    };
   }
 
   @override
@@ -77,15 +65,18 @@ class _CreateProfileState extends State<CreateProfile> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              imageURl == null
-                  ? CircleAvatar(
-                      radius: 70,
-                      child: Icon(Icons.person),
-                    )
-                  : CircleAvatar(
-                      radius: 70,
-                      backgroundImage: NetworkImage(imageURl!),
-                    ),
+              FutureBuilder<Map<String, dynamic>>(
+                  future: getDefaultData(),
+                  builder: (context, snap) {
+                    if (snap.hasData) {
+                      return CircleAvatar(
+                        radius: 70,
+                        backgroundImage: NetworkImage(snap.data![IMAGEURLKEY]),
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
             ],
           ),
           LeadingTitleText(

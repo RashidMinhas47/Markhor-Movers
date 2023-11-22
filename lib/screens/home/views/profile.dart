@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/auth/check_user_status.dart';
@@ -19,20 +20,17 @@ class ProfileSceen extends StatefulWidget {
 }
 
 class _ProfileSceenState extends State<ProfileSceen> {
-  String userName = '';
-  String userImage = '';
-  getData() async {
+  Future<String> getImageURL() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    userName = prefs.getString(NAMEKEY)!;
-    userImage = prefs.getString(IMAGEURLKEY)!;
+
+    return prefs.get(IMAGEURLKEY).toString();
   }
 
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      getData();
-    });
+  Future<String> getUserName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String firstName = prefs.get(NAMEKEY).toString().split(' ').first;
+    String lastName = prefs.get(NAMEKEY).toString().split(' ').elementAt(2);
+    return '$firstName $lastName';
   }
 
   @override
@@ -55,20 +53,39 @@ class _ProfileSceenState extends State<ProfileSceen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(userImage),
-                      ),
-                      const Gap(20),
-                      Text(
-                        //TODO: THE NEXT WORK WILL DONE HERE
+                      FutureBuilder(
+                          future: getImageURL(),
+                          builder: (context, snap) {
+                            if (snap.hasData) {
+                              String imgURL = snap.data!;
 
-                        userName,
-                        style: GoogleFonts.poppins(
-                            fontSize: 24,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      )
+                              return CircleAvatar(
+                                radius: 40,
+                                backgroundImage: NetworkImage(imgURL),
+                              );
+                            } else if (snap.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else {
+                              return Text('You Have got something');
+                            }
+                          }),
+                      const Gap(20),
+                      FutureBuilder(
+                          future: getUserName(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!,
+                                style: GoogleFonts.poppins(
+                                    fontSize: 24,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            } else {
+                              return CircularProgressIndicator();
+                            }
+                          })
                     ],
                   ),
                   const Gap(20),
@@ -76,27 +93,20 @@ class _ProfileSceenState extends State<ProfileSceen> {
                     thickness: 1,
                     color: Colors.white,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            'Messages',
-                            style: GoogleFonts.poppins(
-                                fontSize: 22,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500),
-                          )),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20,
+                  ListTile(
+                    onTap: () {},
+                    leading: Text(
+                      'Messages',
+                      style: GoogleFonts.poppins(
+                          fontSize: 22,
                           color: Colors.white,
-                        ),
-                      ),
-                    ],
+                          fontWeight: FontWeight.w500),
+                    ),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      color: Colors.white,
+                    ),
                   ),
                 ]),
           ),

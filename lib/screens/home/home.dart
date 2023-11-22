@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:markhor_movers/components/book_ride_btn.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
+import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
 import 'package:markhor_movers/screens/home/views/profile.dart';
@@ -21,15 +25,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Future<String> setName() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
 
-    Future.delayed(const Duration(seconds: 3)).whenComplete(
-        () async => await prefs.setString('name', 'Rashid Minhas'));
-
-    return prefs.get('name').toString();
-  }
-
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -108,24 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            FutureBuilder(
-                future: setName(),
-                builder: (context, snap) {
-                  if (snap.hasData) {
-                    String name = snap.data!;
-                    return TextButton(
-                        onPressed: () {},
-                        child: LeadingTitleText(name ?? "You Got not data"));
-                  } else if (snap.hasData) {
-                    return Text(snap.error.toString());
-                  } else if (snap.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
-                  } else {
-                    return Text('You Have got something');
-                  }
-                }),
             const Gap(30),
-            Image.asset(kAroundYou),
+            Container(
+              height: 200,
+              width: 200,
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _kGooglePlex,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              ),
+            )
           ],
         ),
       ),

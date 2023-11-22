@@ -34,19 +34,13 @@ class MapSampleState extends State<MapSample> {
         children: [
           Expanded(
             child: GoogleMap(
-              mapType: MapType.hybrid,
+              mapType: MapType.normal,
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);
               },
             ),
           ),
-          Container(
-            color: Colors.blue,
-            height: 100,
-            width: double.maxFinite,
-            child: Text("something wen wrong!"),
-          )
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(

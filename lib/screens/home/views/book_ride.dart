@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
@@ -25,23 +28,17 @@ enum Vehicles {
 
 class _BookRideState extends State<BookRide> {
   Vehicles vehiclesType = Vehicles.none;
-  Color vehicleColor = Colors.grey;
-  onSelectBike(Vehicles vehicles) {
-    switch (vehiclesType) {
-      case Vehicles.bike:
-        setState(() {
-          vehiclesType = vehicles;
-          print('.....................$vehiclesType...........');
-        });
-      case Vehicles.car:
-        vehicleColor = kPrimaryColor;
-      case Vehicles.none:
-        vehicleColor = Colors.grey;
-    }
-  }
+  String vehicleName = 'none';
 
   TextEditingController pickPointCont = TextEditingController();
   TextEditingController endPointCont = TextEditingController();
+  final Completer<GoogleMapController> _controller =
+      Completer<GoogleMapController>();
+
+  static const CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(37.42796133580664, -122.085749655962),
+    zoom: 14.4746,
+  );
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -63,7 +60,10 @@ class _BookRideState extends State<BookRide> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          onSelectBike(Vehicles.bike);
+                          setState(() {
+                            vehiclesType = Vehicles.bike;
+                            vehicleName = 'bike';
+                          });
                         },
                         icon: Icon(
                           Icons.motorcycle_rounded,
@@ -75,7 +75,10 @@ class _BookRideState extends State<BookRide> {
                       ),
                       IconButton(
                         onPressed: () {
-                          onSelectBike(Vehicles.car);
+                          setState(() {
+                            vehiclesType = Vehicles.car;
+                            vehicleName = "car";
+                          });
                           print('.............it works.........');
                         },
                         icon: Icon(
@@ -113,6 +116,15 @@ class _BookRideState extends State<BookRide> {
                 ],
               ),
             ),
+            Expanded(
+              child: GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _kGooglePlex,
+                onMapCreated: (GoogleMapController controller) {
+                  _controller.complete(controller);
+                },
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: AuthButton(
@@ -126,11 +138,16 @@ class _BookRideState extends State<BookRide> {
                       'PICKPOINT': pickPointCont.text,
                       'ENDPOINT': endPointCont.text,
                       'BOOKEDTIME': DateTime.now(),
-                      'VEHICLETYPE': 'car',
+                      'VEHICLETYPE': vehicleName,
                     });
                   } else {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text('Enter details')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: kDarkGreyColor,
+                        content: Text(
+                          'Enter details',
+                          style: GoogleFonts.poppins(
+                              color: Colors.white, fontSize: 17),
+                        )));
                   }
                 },
                 title: 'Confirm Destination',
