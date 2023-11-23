@@ -22,10 +22,21 @@ class MapSampleState extends State<MapSample> {
   );
 
   static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 14.151926040649414);
+    bearing: 192.8334901395799,
+    target: LatLng(37.43296265331129, -122.08832357078792),
+    tilt: 59.440717697143555,
+    zoom: 28.151926040649414,
+  );
+
+  static const Marker _kGooglePlexMarker = Marker(
+    infoWindow: InfoWindow(title: 'Google Plex'),
+    markerId: MarkerId('_kGooglePlexMarker'),
+    icon: BitmapDescriptor.defaultMarker,
+    position: LatLng(37.42796133580664, -122.085749655962),
+  );
+  static const Marker _kLakeMarker = Marker(
+      markerId: MarkerId('_kLakeMarker'),
+      position: LatLng(37.43296265331129, -122.08832357078792));
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +46,7 @@ class MapSampleState extends State<MapSample> {
           Expanded(
             child: GoogleMap(
               mapType: MapType.normal,
+              markers: {_kGooglePlexMarker, _kLakeMarker},
               initialCameraPosition: _kGooglePlex,
               onMapCreated: (GoogleMapController controller) {
                 _controller.complete(controller);

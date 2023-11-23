@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(useMaterial3: true),
-      initialRoute: UserStatus.scr,
+      initialRoute: MapSample.scr,
       routes: {
         SignInScreen.scr: (context) => const SignInScreen(),
         OTPScreen.scr: (context) => const OTPScreen(),
