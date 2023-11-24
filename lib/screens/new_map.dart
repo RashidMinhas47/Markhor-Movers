@@ -1,8 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:markhor_movers/services/google_map_services.dart';
 
 class MapSample extends StatefulWidget {
   static const String scr = '/MapSample';
@@ -13,58 +14,110 @@ class MapSample extends StatefulWidget {
 }
 
 class MapSampleState extends State<MapSample> {
-  final Completer<GoogleMapController> _controller =
-      Completer<GoogleMapController>();
+  GoogleMapController? mapController;
+  LocationData? currentLocation;
+  Location location = Location();
+  Marker? _originMarker;
+  Marker? _destinationMarker;
 
-  static const CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  @override
+  void initState() {
+    super.initState();
 
-  static const CameraPosition _kLake = CameraPosition(
-    bearing: 192.8334901395799,
-    target: LatLng(37.43296265331129, -122.08832357078792),
-    tilt: 59.440717697143555,
-    zoom: 28.151926040649414,
-  );
+    getLocation();
+    setState(() {});
+  }
 
-  static const Marker _kGooglePlexMarker = Marker(
-    infoWindow: InfoWindow(title: 'Google Plex'),
-    markerId: MarkerId('_kGooglePlexMarker'),
-    icon: BitmapDescriptor.defaultMarker,
-    position: LatLng(37.42796133580664, -122.085749655962),
-  );
-  static const Marker _kLakeMarker = Marker(
-      markerId: MarkerId('_kLakeMarker'),
-      position: LatLng(37.43296265331129, -122.08832357078792));
+  Future<void> getLocation() async {
+    var location = Location();
+    try {
+      LocationData getLocation = await location.getLocation();
+
+      setState(() {
+        currentLocation = getLocation;
+      });
+    } catch (e) {
+      print("Error getting location: $e");
+    }
+  }
+
+  void _addMarker(LatLng pos) {
+    if (_originMarker == null ||
+        (_originMarker != null && _destinationMarker != null)) {
+      setState(() {
+        _originMarker = Marker(
+          markerId: const MarkerId("_originMarker"),
+          infoWindow: const InfoWindow(title: 'Origin'),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          position: pos,
+        );
+        _destinationMarker = null;
+      });
+    } else {
+      setState(() {
+        _destinationMarker = Marker(
+          markerId: const MarkerId("_destinationMarker"),
+          infoWindow: const InfoWindow(title: 'Destination'),
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          position: pos,
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(actions: [
+        TextButton(
+            onPressed: () => mapController!.animateCamera(
+                CameraUpdate.newCameraPosition(CameraPosition(
+                    target: _originMarker!.position, zoom: 14.9, tilt: 49.0))),
+            child: Text(
+              'origin',
+              style: GoogleFonts.poppins(
+                  color: Colors.blue,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+            )),
+        TextButton(
+            onPressed: () => mapController!.animateCamera(
+                CameraUpdate.newCameraPosition(CameraPosition(
+                    target: _destinationMarker!.position,
+                    zoom: 14.9,
+                    tilt: 49.0))),
+            child: Text(
+              'destination',
+              style: GoogleFonts.poppins(
+                  color: Colors.green,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600),
+            ))
+      ]),
       body: Column(
         children: [
           Expanded(
             child: GoogleMap(
-              mapType: MapType.normal,
-              markers: {_kGooglePlexMarker, _kLakeMarker},
-              initialCameraPosition: _kGooglePlex,
+              initialCameraPosition:
+                  GoogleMapServices.initialCameraPosition(currentLocation!),
               onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
+                setState(() {
+                  // _controller.complete(controller);
+                  mapController = controller;
+                });
+              },
+              onLongPress: _addMarker,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              markers: {
+                if (_originMarker != null) _originMarker!,
+                if (_destinationMarker != null) _destinationMarker!,
               },
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To the lake!'),
-        icon: const Icon(Icons.directions_boat),
-      ),
     );
-  }
-
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    await controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
   }
 }
