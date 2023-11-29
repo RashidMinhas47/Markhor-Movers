@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:markhor_movers/constants/constants.dart';
 import 'package:markhor_movers/services/google_map_services.dart';
 
 class MapSample extends StatefulWidget {
@@ -15,33 +19,54 @@ class MapSample extends StatefulWidget {
 
 class MapSampleState extends State<MapSample> {
   GoogleMapController? mapController;
+  final Completer<GoogleMapController> _controller = Completer();
   LocationData? currentLocation;
-  Location location = Location();
   Marker? _originMarker;
   Marker? _destinationMarker;
+  List<LatLng> polycordinates = [];
+  // static const LatLng origin = LatLng(37.33400927, -122.03272188);
+  // static const LatLng destination = LatLng(37.33429383, -122.07700044);
 
   @override
   void initState() {
     super.initState();
-
     getLocation();
-    setState(() {});
   }
 
-  Future<void> getLocation() async {
-    var location = Location();
-    try {
-      LocationData getLocation = await location.getLocation();
+  void getPolyPoints(LatLng origin, LatLng destination) async {
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      google_api_key,
+      PointLatLng(origin.latitude, origin.longitude),
+      PointLatLng(destination.latitude, destination.longitude),
+    );
+    print(
+        "......................${_originMarker!.position.latitude}......................");
 
-      setState(() {
-        currentLocation = getLocation;
+    if (result.points.isNotEmpty) {
+      for (var point in result.points) {
+        setState(() {
+          polycordinates.add(LatLng(point.latitude, point.longitude));
+        });
+      }
+    }
+  }
+
+  void getLocation() {
+    Location location = Location();
+    try {
+      location.getLocation().then((location) {
+        LocationData locationData = location;
+        setState(() {
+          currentLocation = locationData;
+        });
       });
     } catch (e) {
       print("Error getting location: $e");
     }
   }
 
-  void _addMarker(LatLng pos) {
+  void _addMarker(LatLng pos) async {
     if (_originMarker == null ||
         (_originMarker != null && _destinationMarker != null)) {
       setState(() {
@@ -63,6 +88,12 @@ class MapSampleState extends State<MapSample> {
           position: pos,
         );
       });
+      LatLng origin = _originMarker!.position;
+      LatLng destination = _destinationMarker!.position;
+      getPolyPoints(
+        LatLng(origin.latitude, origin.longitude),
+        LatLng(destination.latitude, destination.longitude),
+      );
     }
   }
 
@@ -73,7 +104,7 @@ class MapSampleState extends State<MapSample> {
         TextButton(
             onPressed: () => mapController!.animateCamera(
                 CameraUpdate.newCameraPosition(CameraPosition(
-                    target: _originMarker!.position, zoom: 14.9, tilt: 49.0))),
+                    target: _originMarker!.position, zoom: 14.9, tilt: 10.0))),
             child: Text(
               'origin',
               style: GoogleFonts.poppins(
@@ -83,10 +114,14 @@ class MapSampleState extends State<MapSample> {
             )),
         TextButton(
             onPressed: () => mapController!.animateCamera(
-                CameraUpdate.newCameraPosition(CameraPosition(
-                    target: _destinationMarker!.position,
-                    zoom: 14.9,
-                    tilt: 49.0))),
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: _destinationMarker!.position,
+                      zoom: 14.9,
+                      tilt: 49.0,
+                    ),
+                  ),
+                ),
             child: Text(
               'destination',
               style: GoogleFonts.poppins(
@@ -98,23 +133,33 @@ class MapSampleState extends State<MapSample> {
       body: Column(
         children: [
           Expanded(
-            child: GoogleMap(
-              initialCameraPosition:
-                  GoogleMapServices.initialCameraPosition(currentLocation!),
-              onMapCreated: (GoogleMapController controller) {
-                setState(() {
-                  // _controller.complete(controller);
-                  mapController = controller;
-                });
-              },
-              onLongPress: _addMarker,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-              markers: {
-                if (_originMarker != null) _originMarker!,
-                if (_destinationMarker != null) _destinationMarker!,
-              },
-            ),
+            child: currentLocation != null
+                ? GoogleMap(
+                    initialCameraPosition:
+                        GoogleMapServices.initialCameraPosition(
+                            currentLocation!),
+                    onMapCreated: (GoogleMapController controller) {
+                      setState(() {
+                        // _controller.complete(controller);
+                        mapController = controller;
+                      });
+                    },
+                    polylines: {
+                      Polyline(
+                          polylineId: const PolylineId("route"),
+                          points: polycordinates)
+                    },
+                    onLongPress: _addMarker,
+                    myLocationEnabled: true,
+                    myLocationButtonEnabled: true,
+                    markers: {
+                      if (_originMarker != null) _originMarker!,
+                      if (_destinationMarker != null) _destinationMarker!,
+                    },
+                  )
+                : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
           ),
         ],
       ),

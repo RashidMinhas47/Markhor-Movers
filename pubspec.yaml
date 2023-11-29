@@ -26,12 +26,17 @@ dependencies:
   firebase_core: ^2.21.0
   google_sign_in: ^6.1.5
   google_maps_flutter: ^2.5.0
-  geolocator: ^10.1.0
+  geolocator: ^9.0.2
   location: ^5.0.3
-  google_maps_webservice: ^0.0.20-nullsafety.5
+  # google_maps_webservice: ^0.0.20-nullsafety.5
   dio: ^5.3.4
   geocoding: ^2.1.1
   flutter_polyline_points: ^1.0.0
+  google_maps_place_picker_mb: ^3.0.0
+  flutter_google_places_hoc081098: ^1.0.0-nullsafety.5
+  google_api_headers: ^1.1.1
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  http: ^0.13.6
 
 dev_dependencies:
   flutter_test:

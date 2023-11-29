@@ -96,30 +96,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 )
               ],
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              height: 65,
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              width: size.width * 0.9,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: kDarkGreyColor),
-              child: LeadingTitleText(
-                'Enter pickup point',
-                textAlign: TextAlign.center,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   height: 65,
+            //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            //   width: size.width * 0.9,
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(12),
+            //       color: kDarkGreyColor),
+            //   child: LeadingTitleText(
+            //     'Enter pickup point',
+            //     textAlign: TextAlign.center,
+            //     fontWeight: FontWeight.w500,
+            //   ),
+            // ),
             const Gap(30),
-            Container(
-              height: 200,
-              width: 200,
-              child: GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _kGooglePlex,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller.complete(controller);
-                },
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                child: GoogleMap(
+                  mapType: MapType.normal,
+                  initialCameraPosition: _kGooglePlex,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                ),
               ),
             )
           ],
