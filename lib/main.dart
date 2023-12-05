@@ -1,53 +1,60 @@
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:markhor_movers/firebase_options.dart';
-// import 'package:markhor_movers/screens/auth/add_payment.dart';
-// import 'package:markhor_movers/screens/auth/check_user_status.dart';
-// import 'package:markhor_movers/screens/auth/create_profile.dart';
-// import 'package:markhor_movers/screens/auth/otp_screen.dart';
-// import 'package:markhor_movers/screens/home/home.dart';
-// import 'package:markhor_movers/screens/home/views/book_ride.dart';
-// import 'package:markhor_movers/screens/home/views/send_packae.dart';
-// import 'package:markhor_movers/screens/new_map.dart';
-// import 'package:markhor_movers/screens/home/views/profile.dart';
-// import 'dart:io' show Platform;
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:markhor_movers/firebase_options.dart';
+import 'package:markhor_movers/providers/map_provider.dart';
+import 'package:markhor_movers/screens/auth/add_payment.dart';
+import 'package:markhor_movers/screens/auth/check_user_status.dart';
+import 'package:markhor_movers/screens/auth/create_profile.dart';
+import 'package:markhor_movers/screens/auth/otp_screen.dart';
+import 'package:markhor_movers/screens/home/home.dart';
+import 'package:markhor_movers/screens/home/views/book_ride.dart';
+import 'package:markhor_movers/screens/home/views/send_packae.dart';
+import 'package:markhor_movers/screens/new_map.dart';
+import 'package:markhor_movers/screens/home/views/profile.dart';
+import 'package:markhor_movers/screens/trips_history.dart';
+import 'dart:io' show Platform;
+import 'package:provider/provider.dart';
+import 'screens/auth/sign_in.dart';
+import 'screens/home/views/set_destination.dart';
+import 'screens/home/views/set_pickup_loc.dart';
 
-// import 'screens/auth/sign_in.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   if (Platform.isAndroid) {
-//     AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
-//   }
-//   runApp(const MyApp());
-// }
+  runApp(const MyApp());
+}
 
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData.dark(useMaterial3: true),
-//       initialRoute: UserStatus.scr,
-//       routes: {
-//         SignInScreen.scr: (context) => const SignInScreen(),
-//         OTPScreen.scr: (context) => const OTPScreen(),
-//         CreateProfile.scr: (context) => const CreateProfile(),
-//         AddPaymentScreen.scr: (context) => const AddPaymentScreen(),
-//         HomeScreen.scr: (context) => const HomeScreen(),
-//         SendPackage.scr: (context) => const SendPackage(),
-//         BookRide.scr: (context) => const BookRide(),
-//         MapSample.scr: (context) => const MapSample(),
-//         ProfileSceen.scr: (context) => const ProfileSceen(),
-//         UserStatus.scr: (context) => const UserStatus(),
-//       },
-//     );
-//   }
-// }
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (context) => MapProvider())],
+      child: MaterialApp(
+        theme: ThemeData.dark(useMaterial3: true),
+        initialRoute: UserStatus.scr,
+        routes: {
+          SignInScreen.scr: (_) => const SignInScreen(),
+          OTPScreen.scr: (_) => const OTPScreen(),
+          CreateProfile.scr: (_) => const CreateProfile(),
+          AddPaymentScreen.scr: (_) => const AddPaymentScreen(),
+          HomeScreen.scr: (_) => const HomeScreen(),
+          SendPackage.scr: (_) => const SendPackage(),
+          BookRide.scr: (_) => const BookRide(),
+          MapSample.scr: (_) => const MapSample(),
+          ProfileSceen.scr: (_) => const ProfileSceen(),
+          UserStatus.scr: (_) => const UserStatus(),
+          SetDestination.scr: (_) => const SetDestination(),
+          SetOrigin.scr: (_) => const SetOrigin(),
+          YourTrips.scr: (_) => const YourTrips(),
+        },
+      ),
+    );
+  }
+}
 ///////////////////////chat Gpt try 1//////////
 ///
 // import 'package:flutter/material.dart';
@@ -178,164 +185,29 @@
 //   }
 // }
 
-/////////////////////////////////
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+//TODO://///////////////////////////////
+// import 'package:flutter/material.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:location/location.dart';
 
-void main() {
-  runApp(MyApp());
-}
+// void main() {
+//   runApp(MyApp());
+// }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Set Marker Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: SetMarkerScreen(),
-    );
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Set Marker Demo',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: SetMarkerScreen(),
+//     );
+//   }
+// }
 
-class SetMarkerScreen extends StatefulWidget {
-  @override
-  _SetMarkerScreenState createState() => _SetMarkerScreenState();
-}
 
-class _SetMarkerScreenState extends State<SetMarkerScreen> {
-  GoogleMapController? mapController;
-  LatLng? currentLocation;
-  LatLng? selectedLocation;
-  Marker? newLocMarker;
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Set Marker Screen'),
-      ),
-      body: Stack(
-        children: [
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: currentLocation!,
-              zoom: 15.0,
-            ),
-            onTap: _onMapTap,
-            markers: {_buildMarkers()},
-          ),
-          if (selectedLocation != null)
-            Center(
-              child: Icon(
-                Icons.location_pin,
-                size: 40,
-                color: Colors.red,
-              ),
-            ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _setMarker();
-        },
-        child: Icon(Icons.check),
-      ),
-    );
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() {
-      mapController = controller;
-    });
-  }
-
-  Future<void> _getCurrentLocation() async {
-    Location location = Location();
-    LocationData currentLocation = await location.getLocation();
-
-    setState(() {
-      this.currentLocation =
-          LatLng(currentLocation.latitude!, currentLocation.longitude!);
-    });
-  }
-
-  void _onMapTap(LatLng tappedLocation) {
-    setState(() {
-      selectedLocation = tappedLocation;
-    });
-  }
-
-  Marker _buildMarkers() {
-    Set<Marker> markers = {};
-
-    if (selectedLocation != null) {
-      newLocMarker = Marker(
-        markerId: MarkerId('selectedLocation'),
-        position: selectedLocation!,
-      );
-      markers.add(
-        Marker(
-          markerId: MarkerId('selectedLocation'),
-          position: selectedLocation!,
-        ),
-      );
-    }
-
-    return newLocMarker!;
-  }
-
-  void _setMarker() {
-    
-  //   if (selectedLocation != null) {
-  //     // Do something with the selected location, e.g., save it to Firebase, etc.
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: Text('Marker Set'),
-  //           content: Text('Marker set at $selectedLocation'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: Text('OK'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   } else {
-  //     showDialog(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return AlertDialog(
-  //           title: Text('Error'),
-  //           content: Text('Please select a location on the map.'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).pop();
-  //               },
-  //               child: Text('OK'),
-  //             ),
-  //           ],
-  //         );
-  //       },
-  //     );
-  //   }
-  // }
-}
 
 /////////////////////////
 // import 'package:flutter/material.dart';

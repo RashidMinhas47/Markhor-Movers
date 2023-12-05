@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:markhor_movers/components/auth_button.dart';
 import 'package:markhor_movers/components/auth_text_field.dart';
 import 'package:markhor_movers/repositories/auth_repositories.dart';
-import 'package:markhor_movers/screens/auth/create_profile.dart';
 
 import '../../components/icon_btn.dart';
 import '../../components/leading_title_text.dart';
@@ -47,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 return 'Your phone number is not completed';
               } else if (value.isEmpty) {
                 return 'Please enter the phone number';
-              } else if (value.contains('3')) {
+              } else {
                 return null;
               }
             },
@@ -80,11 +78,7 @@ class _SignInScreenState extends State<SignInScreen> {
           const Spacer(),
           AuthButton(
               size: Size(size.width * 0.9, 59),
-              onPressed: () {
-                GoogleSignIn googleSignIn = GoogleSignIn();
-                String email = googleSignIn.currentUser!.email;
-                print('.........................email.....................');
-              },
+              onPressed: () {},
               title: 'Next'),
           const SizedBox(
             height: 30,

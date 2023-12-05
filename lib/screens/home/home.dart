@@ -1,20 +1,20 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:markhor_movers/components/book_ride_btn.dart';
 import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
+import 'package:markhor_movers/constants/constants.dart';
 import 'package:markhor_movers/constants/image_urls.dart';
-import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/home/views/book_ride.dart';
 import 'package:markhor_movers/screens/home/views/send_packae.dart';
 import 'package:markhor_movers/screens/home/views/profile.dart';
-import 'package:markhor_movers/screens/riverpod_home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String scr = '/HomeScreen';
@@ -27,11 +27,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
+  final _auth = FirebaseAuth.instance;
+  final _ridesCollectionSnaps = FirebaseFirestore.instance;
   static const CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -113,15 +115,38 @@ class _HomeScreenState extends State<HomeScreen> {
             const Gap(30),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(20),
-                child: GoogleMap(
-                  mapType: MapType.normal,
-                  initialCameraPosition: _kGooglePlex,
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                ),
-              ),
+                  padding: const EdgeInsets.all(20),
+                  child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                    stream: _ridesCollectionSnaps
+                        .collection(RIDES)
+                        .doc(_auth.currentUser!.email)
+                        .collection(YOURRIDES)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      final origin = snapshot.data!.docs[0].data();
+                      if (snapshot.hasData) {
+                        return GoogleMap(
+                          mapType: MapType.normal,
+                          initialCameraPosition: _kGooglePlex,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                          markers: {
+                            Marker(
+                                markerId: const MarkerId('Origin'),
+                                position: LatLng(
+                                    origin['origin'][0], origin['origin'][1])),
+                            Marker(
+                                markerId: const MarkerId('destination'),
+                                position: LatLng(origin['destination'][0],
+                                    origin['destination'][1]))
+                          },
+                        );
+                      } else {
+                        return const CircularProgressIndicator();
+                      }
+                    },
+                  )),
             )
           ],
         ),

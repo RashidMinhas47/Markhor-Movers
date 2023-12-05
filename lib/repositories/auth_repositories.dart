@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:markhor_movers/constants/constants.dart';
 import 'package:markhor_movers/screens/auth/check_user_status.dart';
 import 'package:markhor_movers/screens/auth/create_profile.dart';
 import 'package:markhor_movers/screens/auth/otp_screen.dart';
@@ -60,8 +61,8 @@ class AuthRepositories extends ChangeNotifier {
       prefs.setString(NAMEKEY, gUser.displayName!);
       setUserCredential(
           prefs.getString(IMAGEURLKEY)!, prefs.getString(NAMEKEY));
-      final _cloudFirestore = FirebaseFirestore.instance;
-      _cloudFirestore.collection("USERS").add({
+      final cloudFirestore = FirebaseFirestore.instance;
+      cloudFirestore.collection(USERS).add({
         'userName': gUser.displayName,
         'email': gUser.email,
         'photoURL': gUser.photoUrl,

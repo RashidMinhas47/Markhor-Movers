@@ -9,6 +9,7 @@ import 'package:markhor_movers/components/leading_title_text.dart';
 import 'package:markhor_movers/constants/colors_scheme.dart';
 import 'package:markhor_movers/repositories/auth_repositories.dart';
 import 'package:markhor_movers/screens/auth/check_user_status.dart';
+import 'package:markhor_movers/screens/trips_history.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileSceen extends StatefulWidget {
@@ -118,7 +119,9 @@ class _ProfileSceenState extends State<ProfileSceen> {
                 style: GoogleFonts.roboto(fontSize: 24, color: Colors.white),
               ),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, YourTrips.scr);
+            },
           ),
           ListTile(
             title: Text(
